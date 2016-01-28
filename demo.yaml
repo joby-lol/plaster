@@ -1,0 +1,59 @@
+System:
+    # 'auto' is set to working directory of script where Config is instantiated
+    root: 'auto'
+    # 'auto' is set to $_SERVER['SERVER_NAME']
+    domain: 'auto'
+    # 'auto' is set to dirname($_SERVER['SCRIPT_NAME'])
+    docRoot: 'auto'
+    # defaults to UTC
+    timezone: 'America/Denver'
+
+TemplateManager:
+    # prepended to URLs in templates when their parameter is set to true
+    baseUrl: '//{{System.domain}}{{System.docRoot}}/demo-basic.php'
+    # fields passed into template renderings in addition to 'page' and 'plaster'
+    fields:
+        site:
+            name: 'Plaster Demo'
+            root: '//{{TemplateManager.baseUrl}}'
+            dateFormat: 'F j, Y, g:ia'
+    Twig:
+        # List directories where Twig will look for templates
+        paths:
+            - '{{System.root}}/templates'
+        # TODO: optionally enable Twig filesystem caching
+
+FileLayer:
+    # Directory where the file layer will look for content
+    source: '{{System.root}}'
+    # Specify filenames that can be used as indexes of folders
+    # These filenames will also be stripped from the ends of
+    # a Request's canonical URL
+    indexes:
+        - 'index.md'
+        - 'index.html'
+    # You can use this section to rewrite paths
+    # It is applied to full file paths, not URLs
+    # If a rule produces a filename that can't be found
+    # it will be skipped
+    rewrite:
+        '/\.html?$/i': '.md'
+        
+ContentLayer:
+    metaSuffix: '.yaml'
+    # Default metadata
+    # Until the Content Layer runs you can set headers in meta.headers
+    # This is to simplify definition of custom headers in individual
+    # file metadata
+    defaultMeta:
+        # category, categories and tags fields are handled like in Jekyll
+        category: 'uncategorized'
+        # indicates how long output caching should keep the output of a page
+        # also used as the HTTP header max-age by default
+        ttl: 600
+        # default template to use
+        template: default.twig
+    # Used to specify your own content handlers for files
+    # key should be a regex, value the fully-qualified name of a class
+    # implementing \jobyone\Plaster\Interfaces\ContentHandler
+    fileHandlerPatterns: []

@@ -1,0 +1,29 @@
+<html>
+<head>
+    <title>{{ page.meta.title }} :: {{ site.name }}</title>
+    {# 
+        Canonical links are a good idea, and easy with Plaster
+        It's especially well-advised if you're using FileLayer.rewrite rules ;-) 
+    #}<link rel="canonical" href="{{ page.url(true) }}" />
+</head>
+<body>
+    <h1>{{ page.meta.title }}</h1>
+    {{ page.url(true) }}
+    
+    <h2>Children</h2>
+    {% for page in plaster.children %}
+        <div><a href="{{ page.url }}">{{ page.meta.title }}</a></div>
+    {% endfor %}
+    
+    <h2>Siblings</h2>
+    {% for page in plaster.siblings %}
+        <div><a href="{{ page.url }}">{{ page.meta.title }}</a></div>
+    {% endfor %}
+    
+    <h2>Breadcrumb</h2>
+    {% for page in plaster.breadcrumb %}
+        <div><a href="{{ page.url }}">{{ page.meta.title }}</a></div>
+    {% endfor %}
+    
+</body>
+</html>

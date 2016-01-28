@@ -1,0 +1,60 @@
+System:
+    root: 'auto'
+    domain: 'auto'
+    docRoot: 'auto'
+    timezone: 'UTC'
+    errorHandler: '\jobyone\Plaster\ErrorHandler'
+
+TemplateManager:
+    baseUrl: '//{{System.domain}}{{System.docRoot}}'
+    fields:
+        site:
+            name: 'Unnamed Plaster Site'
+            root: '//{{TemplateManager.baseUrl}}'
+            dateFormat: 'F j, Y, g:ia'
+    Twig:
+        paths:
+            - '{{System.root}}/templates'
+
+FileLayer:
+    source: '{{System.root}}'
+    indexes: []
+    rewrite: []
+        
+ContentLayer:
+    metaSuffix: '.yaml'
+    defaultMeta:
+        category: ''
+        categories: ''
+        tags: ''
+        ttl: 600
+        template: default.twig
+        headers:
+            'Content-Disposition':
+                inline: true
+            'Cache-control':
+                'public': true
+                'max-age': 'auto'
+            'ETag': 'auto'
+    # Default handler should generally pass through content unchanged,
+    # and should also skip templating
+    defaultHandler: '\jobyone\Plaster\ContentHandlers\StreamHandler'
+    fileHandlerPatterns:
+        '/\.md$/i': '\jobyone\Plaster\ContentHandlers\MarkdownHandler'
+    # simpleMime settings are only for servers without fileinfo
+    simpleMime:
+        '/\.(bmp?)$/i': 'image/bmp'
+        '/\.gif$/i': 'image/gif'
+        '/\.ico$/i': 'image/x-icon'
+        '/\.jpe?g?$/i': 'image/jpeg'
+        '/\.(x-)?png$/i': 'image/png'
+        '/\.tiff?$/i': 'image/tiff'
+        '/\.css/i': 'text/css'
+        '/\.js/i': 'application/x-javascript'
+        '/\.html?/i': 'text/html'
+        '/[\/\\\][^.]+/': 'text/plain'
+        #Last entry is intentionally vague, to match default cases
+        '/.*/': 'text/html'
+        
+TemplateLayer:
+    # No config here yet, there may never be any need

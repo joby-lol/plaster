@@ -1,0 +1,31 @@
+{
+    "name": "jobyone/plaster",
+    "type": "library",
+    "description": "A flat-file non-CMS. Plaster puts a pretty coat on flat files, without disrupting the fundamental file/folder concept of a website.",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Joby Elliott",
+            "email": "code@byjoby.com",
+            "homepage": "http://byjoby.com/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/yaml": "^2.6",
+        "twig/twig": "^1.23",
+        "michelf/php-markdown": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "jobyone\\Plaster\\": "src/"
+        }
+    },
+    "config": {
+        "vendor-dir": "vendor",
+        "bin-dir": "vendor/bin",
+        "bin-compat": "full",
+        "platform": {}
+    }
+}
