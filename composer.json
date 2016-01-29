@@ -11,6 +11,12 @@
             "role": "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/jobyone/plaster"
+        }
+    ],
     "require": {
         "php": ">=5.3.0",
         "symfony/yaml": "^2.6",
@@ -19,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "jobyone\\Plaster\\": "src/"
+            "jobyone\\Plaster\\": "src"
         }
     },
     "config": {
