@@ -32,13 +32,7 @@ FileLayer:
     indexes:
         - 'index.md'
         - 'index.html'
-    # You can use this section to rewrite paths
-    # It is applied to full file paths, not URLs
-    # If a rule produces a filename that can't be found
-    # it will be skipped
-    rewrite:
-        '/\.html?$/i': '.md'
-        
+
 ContentLayer:
     metaSuffix: '.yaml'
     # Default metadata

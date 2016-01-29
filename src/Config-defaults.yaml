@@ -19,8 +19,7 @@ TemplateManager:
 FileLayer:
     source: '{{System.root}}'
     indexes: []
-    rewrite: []
-        
+
 ContentLayer:
     metaSuffix: '.yaml'
     defaultMeta:
@@ -55,6 +54,6 @@ ContentLayer:
         '/[\/\\\][^.]+/': 'text/plain'
         #Last entry is intentionally vague, to match default cases
         '/.*/': 'text/html'
-        
+
 TemplateLayer:
     # No config here yet, there may never be any need

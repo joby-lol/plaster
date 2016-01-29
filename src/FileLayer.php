@@ -20,13 +20,6 @@ class FileLayer extends AbstractLayer implements Interfaces\TransformationLayer
         }
         $response->setUrl($url);
 
-        //rewriting allows regular expressions to be used to rewrite
-        //one file to another -- for example to serve files with the
-        //extension md as if it were html
-        if (!is_file($file) && $this->config->get('FileLayer.rewrite')) {
-            $file = $this->rewrite($file);
-        }
-
         //TODO: Check for dangerous paths
         $file = realpath($file);
         if (!$file || !file_exists($file)) {
@@ -50,16 +43,4 @@ class FileLayer extends AbstractLayer implements Interfaces\TransformationLayer
         return false;
     }
 
-    protected function rewrite($file)
-    {
-        foreach ($this->config->get('FileLayer.rewrite') as $pattern => $replacement) {
-            if (preg_match($pattern, $file)) {
-                $alternate = preg_replace($pattern, $replacement, $file);
-                if (file_exists($alternate)) {
-                    return $alternate;
-                }
-            }
-        }
-        return $file;
-    }
 }
