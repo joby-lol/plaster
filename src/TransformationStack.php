@@ -5,16 +5,16 @@ class TransformationStack extends AbstractLayer implements Interfaces\Transforma
 {
     protected $stack = array();
     protected $config;
-    
-    function addLayer($name, Interfaces\TransformationLayer $layer, $test = null)
+
+    public function addLayer($name, Interfaces\TransformationLayer $layer, $test = null)
     {
         $this->stack[$name] = array(
             'layer' => $layer,
-            'test' => $test
+            'test'  => $test,
         );
     }
-    
-    function doTransform(Interfaces\Response $response)
+
+    public function doTransform(Interfaces\Response $response)
     {
         foreach ($this->stack as $layer) {
             if ($layer['test'] === null || $layer['test']($response)) {

@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace jobyone\Plaster;
 
 use \Exception;
@@ -8,27 +8,25 @@ class TemplateHelper implements Interfaces\TemplateHelper
     protected $config;
     protected $stack;
     protected $context;
-    
-    function __construct(
+
+    public function __construct(
         \jobyone\Plaster\Interfaces\Config $config,
         \jobyone\Plaster\Interfaces\Response $context,
         \jobyone\Plaster\Interfaces\TransformationLayer $stack
-    )
-    {
-        $this->config = $config;
-        $this->stack = $stack;
+    ) {
+        $this->config  = $config;
+        $this->stack   = $stack;
         $this->context = $context;
     }
-    
-    function twigFieldsFactory(
+
+    public function twigFieldsFactory(
         \jobyone\Plaster\Interfaces\Config $config,
         \jobyone\Plaster\Interfaces\Response $context,
         \jobyone\Plaster\Interfaces\TransformationLayer $stack,
         $fields = array()
-    )
-    {
-        $fields = array_replace_recursive($config->get('TemplateManager.fields'), $fields);
-        $fields['page'] = new TemplateHelperPage($config, $context);
+    ) {
+        $fields            = array_replace_recursive($config->get('TemplateManager.fields'), $fields);
+        $fields['page']    = new TemplateHelperPage($config, $context);
         $fields['plaster'] = new TemplateHelper(
             $config,
             $context,
@@ -37,16 +35,16 @@ class TemplateHelper implements Interfaces\TemplateHelper
         );
         return $fields;
     }
-    
-    function page($url = false)
+
+    public function page($url = false)
     {
         $url = $this->parseUrl($url);
-        //try/catch is here because this is template code 
+        //try/catch is here because this is template code
         //it should try as hard as possible to not explode
         try {
             $response = new Response($url);
             $response = $this->stack->transform($response);
-        }catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             return false;
         }
         if ($response && $response->getStatus() == 200) {
@@ -54,11 +52,11 @@ class TemplateHelper implements Interfaces\TemplateHelper
         }
         return false;
     }
-    
-    function parent($url = false)
+
+    public function parent($url = false)
     {
-        $url = $this->parseUrl($url);
-        $page = false;
+        $url       = $this->parseUrl($url);
+        $page      = false;
         $parentUrl = $url;
         do {
             $parentUrl = preg_replace('/^(.*\/)[^\/]+/', '$1', $parentUrl);
@@ -67,32 +65,32 @@ class TemplateHelper implements Interfaces\TemplateHelper
                 return false;
             }
             //if we've reached the root, return
-            //if that returns an error there is a problem, but it's not this 
+            //if that returns an error there is a problem, but it's not this
             //function's problem
             if ($parentUrl == '/') {
                 return $this->page($parentUrl);
             }
             $page = $this->page($parentUrl);
-        }while (!$page);
+        } while (!$page);
         return $page;
     }
-    
-    function breadcrumb($url = false)
+
+    public function breadcrumb($url = false)
     {
         $url = $this->parseUrl($url);
         if ($url == '/') {
             return array();
         }
         $breadCrumb = array();
-        $parent = $this->parent($url);
+        $parent     = $this->parent($url);
         while ($parent) {
             $breadCrumb[] = $parent;
-            $parent = $this->parent($parent->url());
+            $parent       = $this->parent($parent->url());
         }
         return array_reverse($breadCrumb);
     }
-    
-    function children($url = false, $sort = 'meta.title', $order = 'asc')
+
+    public function children($url = false, $sort = 'meta.title', $order = 'asc')
     {
         $url = $this->parseUrl($url);
         $dir = realpath($this->config->get('FileLayer.source') . '/' . $url);
@@ -113,8 +111,8 @@ class TemplateHelper implements Interfaces\TemplateHelper
         }
         return $pages;
     }
-    
-    function siblings($url = false, $sort = 'meta.title', $order = 'asc')
+
+    public function siblings($url = false, $sort = 'meta.title', $order = 'asc')
     {
         $parent = $this->parent($url);
         if (!$parent) {
@@ -122,16 +120,17 @@ class TemplateHelper implements Interfaces\TemplateHelper
         }
         return $this->children($parent->url());
     }
-    
-    function sort($pages, $sort = 'meta.title', $order = 'asc')
+
+    public function sort($pages, $sort = 'meta.title', $order = 'asc')
     {
         if (!$url) {
             $url = $this->context->getUrl();
         }
         throw new Exception('Not implemented');
     }
-    
-    protected function parseUrl($url) {
+
+    protected function parseUrl($url)
+    {
         if (!$url) {
             $url = $this->context->getUrl();
         }

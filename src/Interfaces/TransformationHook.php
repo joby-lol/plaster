@@ -1,7 +1,7 @@
-<?php 
+<?php
 namespace jobyone\Plaster\Interfaces;
 
-interface TransformationHook 
+interface TransformationHook
 {
     //TODO: Write transformation hook interface
     //it seems as if hooks should have config, current layer, and current request

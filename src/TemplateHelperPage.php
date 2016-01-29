@@ -1,20 +1,19 @@
-<?php 
+<?php
 namespace jobyone\Plaster;
 
 class TemplateHelperPage implements Interfaces\TemplateHelperPage
 {
     protected $response;
-    
-    function __construct(
+
+    public function __construct(
         \jobyone\Plaster\Interfaces\Config $config,
         \jobyone\Plaster\Interfaces\Response $response
-    )
-    {
-        $this->config = $config;
+    ) {
+        $this->config   = $config;
         $this->response = $response;
     }
-    
-    function url($absolute = false)
+
+    public function url($absolute = false)
     {
         $url = $this->response->getUrl();
         if ($absolute && $this->config->get('TemplateManager.baseUrl')) {
@@ -22,13 +21,13 @@ class TemplateHelperPage implements Interfaces\TemplateHelperPage
         }
         return $this->config->get('System.docRoot') . $url;
     }
-    
-    function content()
+
+    public function content()
     {
         return $this->response->getContent();
     }
-    
-    function meta()
+
+    public function meta()
     {
         return $this->response->getMeta();
     }

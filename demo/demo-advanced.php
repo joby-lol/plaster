@@ -1,28 +1,28 @@
-<?php 
+<?php
 require __DIR__ . '/../vendor/autoload.php';
 
 /*
 This file demonstrates how to produce the same result as what is done in
-demo-basic.php without using the PlasterApplication helper. 
+demo-basic.php without using the PlasterApplication helper.
 
-This is 
-*/
+This is
+ */
 
 use jobyone\Plaster\Config;
-use jobyone\Plaster\Response;
-use jobyone\Plaster\FileLayer;
 use jobyone\Plaster\ContentLayer;
+use jobyone\Plaster\FileLayer;
+use jobyone\Plaster\Response;
 use jobyone\Plaster\TemplateLayer;
-use jobyone\Plaster\TransformationStack;
 use jobyone\Plaster\TemplateManager;
+use jobyone\Plaster\TransformationStack;
 
 //initialize config object
 //this object is shared through all transformation layers
 $config = new Config(array(
-    __DIR__ . '/demo.yaml'
+    __DIR__ . '/demo.yaml',
 ));
 
-//initialize an empty Response 
+//initialize an empty Response
 //The steps this Response will follow are:
 // - Have its corresponding file located by a FileLayer
 // - Have its content loaded by a ContentLayer
@@ -33,32 +33,32 @@ $response = new Response($_SERVER['PATH_INFO']);
 //set up transformation layers
 //This layer locates the files that a URL refers to
 $fileLayer = new FileLayer($config);
-//This layer loads the contents of a file and processes it 
-//using ContentHandlers. It also initializes a Response's metadata 
+//This layer loads the contents of a file and processes it
+//using ContentHandlers. It also initializes a Response's metadata
 //and headers.
 $contentLayer = new ContentLayer($config);
-//This layer wraps a Response's content in a the template 
+//This layer wraps a Response's content in a the template
 //specified in it's metadata's "template" field
 $templateLayer = new TemplateLayer($config);
 
 //set up content stack
-//This allows the FileLayer and ContentLayer to be called 
+//This allows the FileLayer and ContentLayer to be called
 //as if they were a single TransformationLayer
 $contentStack = new TransformationStack($config);
 $contentStack->addLayer('file', $fileLayer);
 $contentStack->addLayer('content', $contentLayer);
 
 //set up main transformation stack
-//This allows the content stack and TemplateLayer to be called 
+//This allows the content stack and TemplateLayer to be called
 //as if they were a single TransformationLayer
 $fullStack = new TransformationStack($config);
 $fullStack->addLayer('content', $contentStack);
 //When adding a layer to a TransformationStack, an optional
-//second parameter allows a check to be made before that layer's 
+//second parameter allows a check to be made before that layer's
 //transformation is applied. It must be a function, which will
-//be passed a Request. It should return true/false, whether the 
+//be passed a Request. It should return true/false, whether the
 //layer should be used for that Request.
-$fullStack->addLayer('template', $templateLayer, function($request) {
+$fullStack->addLayer('template', $templateLayer, function ($request) {
     $meta = $request->getMeta();
     if (isset($meta['skipTemplate']) && $meta['skipTemplate']) {
         return false;

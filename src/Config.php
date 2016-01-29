@@ -1,27 +1,27 @@
-<?php 
+<?php
 namespace jobyone\Plaster;
 
 use Symfony\Component\Yaml\Yaml;
 use \Exception;
 
-class Config implements Interfaces\Config 
+class Config implements Interfaces\Config
 {
     protected $configRaw = array(
         'System' => array(
-            'debug' => false
-        )
+            'debug' => false,
+        ),
     );
     protected $config = array();
-    
-    function __construct($config)
+
+    public function __construct($config)
     {
         $this->loadFile(__DIR__ . '/Config-defaults.yaml');
         foreach ($config as $file) {
             $this->loadFile($file);
         }
     }
-    
-    function loadFile($file)
+
+    public function loadFile($file)
     {
         if (!is_file($file)) {
             throw new Exception("Config '$file' not found");
@@ -32,8 +32,8 @@ class Config implements Interfaces\Config
         $newConfig = Yaml::parse(file_get_contents($file));
         $this->set($newConfig);
     }
-    
-    function set($config)
+
+    public function set($config)
     {
         if ($config) {
             $this->configRaw = array_replace_recursive($this->configRaw, $config);
@@ -57,15 +57,15 @@ class Config implements Interfaces\Config
         // set timezone
         date_default_timezone_set($this->get('System.timezone'));
     }
-    
-    function get($key = false)
+
+    public function get($key = false)
     {
         if (!$key) {
             return $this->config;
         }
         //dig down into config with dots as delimiters
         $value = $this->config;
-        $key = explode('.', $key);
+        $key   = explode('.', $key);
         foreach ($key as $step) {
             if (!isset($value[$step])) {
                 return false;
@@ -74,27 +74,27 @@ class Config implements Interfaces\Config
         }
         return $value;
     }
-    
+
     protected function parseVariables($config)
     {
-        foreach($config as $key => $value) {
+        foreach ($config as $key => $value) {
             if (is_array($value)) {
                 $config[$key] = $this->parseVariables($value);
-            }elseif ($this->valueIsString($value)) {
-                $obj = $this;
+            } elseif ($this->valueIsString($value)) {
+                $obj          = $this;
                 $config[$key] = preg_replace_callback(
-                    '/\{\{ ?([^\{\}]+) ?\}\}/', 
-                    function($matches) use($obj) {
+                    '/\{\{ ?([^\{\}]+) ?\}\}/',
+                    function ($matches) use ($obj) {
                         return $this->get($matches[1]);
-                    }, 
+                    },
                     $value);
-            }else {
+            } else {
                 $config[$key] = $value;
             }
         }
         return $config;
     }
-    
+
     protected function valueIsString($value)
     {
         if (!is_string($value)) {
@@ -102,5 +102,5 @@ class Config implements Interfaces\Config
         }
         return true;
     }
-    
+
 }

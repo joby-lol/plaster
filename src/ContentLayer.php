@@ -1,26 +1,26 @@
-<?php 
+<?php
 namespace jobyone\Plaster;
 
 use Symfony\Component\Yaml\Yaml;
 
 /*
 TODO: Meta/Header processing makes this file pretty big and complex
-I might want to split that off into another layer, or into 
+I might want to split that off into another layer, or into
 TransformationHooks attached to this layer
-*/
+ */
 class ContentLayer extends AbstractLayer implements Interfaces\TransformationLayer
 {
-    function doTransform(Interfaces\Response $response)
+    public function doTransform(Interfaces\Response $response)
     {
         //load content from file
         $content = $response->getContent();
         if (is_file($response->getFile())) {
             $content = file_get_contents($response->getFile());
         }
-        
-        //set up default meta and headers 
+
+        //set up default meta and headers
         $meta = $this->defaultMeta($response->getFile());
-        
+
         //look for accompanying YAML .meta file
         $metaFile = $response->getFile() . $this->getConfig()->get('ContentLayer.metaSuffix');
         if (file_exists($metaFile) && is_readable($metaFile)) {
@@ -32,7 +32,7 @@ class ContentLayer extends AbstractLayer implements Interfaces\TransformationLay
                 );
             }
         }
-        
+
         //try to parse out YAML front-matter
         if (preg_match('/^\-\-\-[\r\n]+$/m', $content)) {
             $contentSplit = preg_split('/^\-\-\-[\r\n]+$/m', $content);
@@ -47,13 +47,13 @@ class ContentLayer extends AbstractLayer implements Interfaces\TransformationLay
                 }
             }
         }
-        
+
         //set content, meta and headers into response
         $response->setHeaders($meta['headers']);
         unset($meta['headers']);
         $response->setMeta($meta);
         $response->setContent($content);
-        
+
         //locate handler
         $chosenHandler = false;
         //file handlers
@@ -65,22 +65,22 @@ class ContentLayer extends AbstractLayer implements Interfaces\TransformationLay
         if (!$chosenHandler) {
             $chosenHandler = $this->getConfig()->get('ContentLayer.defaultHandler');
         }
-        
+
         //construct handler and apply transformation
         $chosenHandler = new $chosenHandler($this->getConfig());
-        $response = $chosenHandler->transform($response);
-        
+        $response      = $chosenHandler->transform($response);
+
         //clean up meta and headers
-        $meta = $response->getMeta();
+        $meta    = $response->getMeta();
         $headers = $response->getHeaders();
-        
+
         //ETags
         if (isset($headers['ETag']) && $headers['ETag'] == 'auto') {
             $headers['ETag'] = md5($response->getContent());
         }
         //try to force date to a DateTime
         if (!($meta['date'] instanceof \DateTime)) {
-            $time = strtotime($meta['date']);
+            $time         = strtotime($meta['date']);
             $meta['date'] = new \DateTime();
             $meta['date']->setTimeStamp($time);
         }
@@ -104,19 +104,19 @@ class ContentLayer extends AbstractLayer implements Interfaces\TransformationLay
         if ($headers['Cache-control']['max-age'] == 'auto') {
             if (isset($meta['ttl']) && $meta['ttl']) {
                 $headers['Cache-control']['max-age'] = $meta['ttl'];
-            }else {
+            } else {
                 unset($headers['Cache-control']['max-age']);
             }
         }
-        
+
         //write cleaned-up meta and headers into response
         $response->setMeta($meta);
         $response->setHeaders($headers);
-        
+
         //return the altered response
         return $response;
     }
-    
+
     protected function returnPatternMatch($patterns, $target)
     {
         if (!is_array($patterns)) {
@@ -129,7 +129,7 @@ class ContentLayer extends AbstractLayer implements Interfaces\TransformationLay
         }
         return false;
     }
-    
+
     protected function defaultMeta($file)
     {
         $meta = $this->getConfig()->get('ContentLayer.defaultMeta');
@@ -138,19 +138,20 @@ class ContentLayer extends AbstractLayer implements Interfaces\TransformationLay
         $meta['date']->setTimestamp(filemtime($file));
         //content disposition
         $meta['headers']['Content-Disposition'] = array(
-            'filename' => preg_replace('/^.*[\/\\\]/', '', $file)
+            'filename' => preg_replace('/^.*[\/\\\]/', '', $file),
         );
         //mime
         if (function_exists("finfo_open") && false) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $finfo                           = finfo_open(FILEINFO_MIME_TYPE);
             $meta['headers']['Content-Type'] = finfo_file($finfo, $file);
-        }else {
+        } else {
             $meta['headers']['Content-Type'] = $this->simpleMime($file);
         }
         return $meta;
     }
-    
-    protected function simpleMime($file) {
+
+    protected function simpleMime($file)
+    {
         foreach ($this->getConfig()->get('ContentLayer.simpleMime') as $pattern => $mime) {
             if (preg_match($pattern, $file)) {
                 return $mime;

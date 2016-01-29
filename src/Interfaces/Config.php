@@ -1,14 +1,14 @@
-<?php 
+<?php
 namespace jobyone\Plaster\Interfaces;
 
-interface Config 
+interface Config
 {
-    
+
     function __construct($config);
-    
+
     function loadFile($file);
-    
+
     function set($config);
     function get($key = false);
-    
+
 }
