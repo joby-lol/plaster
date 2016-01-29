@@ -59,7 +59,7 @@ class TemplateHelper implements Interfaces\TemplateHelper
         $page      = false;
         $parentUrl = $url;
         do {
-            $parentUrl = preg_replace('/^(.*\/)[^\/]+/', '$1', $parentUrl);
+            $parentUrl = preg_replace('/^(.*\/)[^\/]+$/', '$1', $parentUrl);
             //if parent url is the same, parent was called on the home page
             if ($parentUrl == $url) {
                 return false;
