@@ -10,12 +10,12 @@ System:
 
 TemplateManager:
     # prepended to URLs in templates when their parameter is set to true
-    baseUrl: '//{{System.domain}}{{System.docRoot}}/demo-basic.php'
+    baseUrl: '//{{System.domain}}{{System.docRoot}}'
     # fields passed into template renderings in addition to 'page' and 'plaster'
     fields:
         site:
             name: 'Plaster Demo'
-            root: '//{{TemplateManager.baseUrl}}'
+            root: '{{TemplateManager.baseUrl}}'
             dateFormat: 'F j, Y, g:ia'
     Twig:
         # List directories where Twig will look for templates

@@ -45,10 +45,10 @@ class TemplateHelper implements Interfaces\TemplateHelper
         //it should try as hard as possible to not explode
         try {
             $response = new Response($url);
+            $response = $this->stack->transform($response);
         }catch (\Exception $ex) {
             return false;
         }
-        $response = $this->stack->transform($response);
         if ($response && $response->getStatus() == 200) {
             return new TemplateHelperPage($this->config, $response);
         }
@@ -85,9 +85,10 @@ class TemplateHelper implements Interfaces\TemplateHelper
         }
         $breadCrumb = array();
         $parent = $this->parent($url);
-        do {
+        while ($parent) {
             $breadCrumb[] = $parent;
-        }while ($parent = $this->parent($parent->url()));
+            $parent = $this->parent($parent->url());
+        }
         return array_reverse($breadCrumb);
     }
     
@@ -104,7 +105,7 @@ class TemplateHelper implements Interfaces\TemplateHelper
             if ($file == '.' || $file == '..') {
                 continue;
             }
-            if ($page = $this->page($url . '/' . $file)) {
+            if ($page = $this->page($url . $file)) {
                 if ($page->url() != $this->context->getUrl()) {
                     $pages[] = $page;
                 }

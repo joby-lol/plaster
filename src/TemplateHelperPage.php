@@ -18,9 +18,9 @@ class TemplateHelperPage implements Interfaces\TemplateHelperPage
     {
         $url = $this->response->getUrl();
         if ($absolute && $this->config->get('TemplateManager.baseUrl')) {
-            $url = $this->config->get('TemplateManager.baseUrl') . $url;
+            return $this->config->get('TemplateManager.baseUrl') . $url;
         }
-        return $url;
+        return $this->config->get('System.docRoot') . $url;
     }
     
     function content()

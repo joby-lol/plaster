@@ -26,6 +26,9 @@ class Response implements Interfaces\Response
     function getUrl()
     {
         $url = $this->url;
+        // var_dump($this->file);
+        // var_dump($url);
+        $url = preg_replace('/([^\/])\/$/', '$1', $url);
         return $url;
     }
     
@@ -38,7 +41,7 @@ class Response implements Interfaces\Response
     
     protected function urlMustBeSafe($url)
     {
-        if (substr($url, 0, 1) != '/') {
+        if (!preg_match('/^\//', $url)) {
             throw new Exception("Url '$url' is invalid. URLs must begin with a '/'.");
         }
         if (preg_match('/\/\./', $url)) {

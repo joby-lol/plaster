@@ -1,0 +1,15 @@
+RewriteEngine on
+
+# Files that will not be handled by Plaster
+RewriteCond %{REQUEST_URI} !.*\.(php) [NC]
+
+# If you are not using FileLayer.rewrite rules,
+# you can let the server decide when to 404, and
+# also get automatic addition of trailing slashes
+# to directories by uncommenting the following,
+# which wil cause Plaster to only handle existing
+# files and directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+
+RewriteRule ^(.*)$ demo-basic.php/$1 [L]

@@ -1,5 +1,7 @@
 <?php 
-require __DIR__ . '/vendor/autoload.php';
+// phpinfo();
+
+require __DIR__ . '/../vendor/autoload.php';
 
 //initialize a PlasterApplication, passing it a 
 //list of config files to use

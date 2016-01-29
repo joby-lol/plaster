@@ -18,7 +18,7 @@ class FileLayer extends AbstractLayer implements Interfaces\TransformationLayer
         //strip index filenames from URL, so that Response contains canonical URL
         $url = $response->getUrl();
         foreach ($this->config->get('FileLayer.indexes') as $index) {
-            $url = preg_replace('/' . preg_quote($index) . '$/i', '', $url);
+            $url = preg_replace('/\/' . preg_quote($index) . '$/i', '', $url);
         }
         $response->setUrl($url);
         

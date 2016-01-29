@@ -1,5 +1,5 @@
 <?php 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 /*
 This file demonstrates how to produce the same result as what is done in
