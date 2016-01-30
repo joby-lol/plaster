@@ -33,9 +33,9 @@ class ContentLayer extends AbstractLayer implements Interfaces\TransformationLay
             }
         }
 
-        //try to parse out YAML front-matter
-        if (preg_match('/^\-\-\-[\r\n]+$/m', $content)) {
-            $contentSplit = preg_split('/^\-\-\-[\r\n]+$/m', $content);
+        //try to find YAML front-matter
+        if (preg_match("/^\-\-\-[\s]*$/m", $content)) {
+            $contentSplit = preg_split("/^\-\-\-[\s]*$/m", $content);
             if (count($contentSplit) == 3) {
                 $content = $contentSplit[2];
                 $newMeta = Yaml::parse($contentSplit[1]);
@@ -86,7 +86,7 @@ class ContentLayer extends AbstractLayer implements Interfaces\TransformationLay
         }
         //set title to filename
         if (!isset($meta['title']) || !$meta['title']) {
-            $meta['title'] = preg_replace('/^.*[\/\\\]/', '', $response->getFile());
+            $meta['title'] = preg_replace("/^.*[\/\\\]/", '', $response->getFile());
         }
         //set single category
         if (isset($meta['category']) && $meta['category']) {
