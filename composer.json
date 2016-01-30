@@ -1,6 +1,5 @@
 {
     "name": "jobyone/plaster",
-    "type": "library",
     "description": "A flat-file non-CMS. Plaster puts a pretty coat on flat files, without disrupting the fundamental file/folder concept of a website.",
     "license": "GPL-3.0",
     "authors": [
@@ -27,10 +26,5 @@
         "bin-dir": "vendor/bin",
         "bin-compat": "full",
         "platform": {}
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.1.x-dev"
-        }
     }
 }
