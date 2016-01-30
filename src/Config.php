@@ -51,6 +51,9 @@ class Config implements Interfaces\Config
         // System.docRoot: 'auto' will be the url of the cwd
         if ($this->configRaw['System']['docRoot'] == 'auto') {
             $this->config['System']['docRoot'] = dirname($_SERVER['SCRIPT_NAME']);
+            if ($this->config['System']['docRoot'] == '\\' || $this->config['System']['docRoot'] == '/') {
+                $this->config['System']['docRoot'] = '';
+            }
         }
         // parse variables
         $this->config = $this->parseVariables($this->config);
