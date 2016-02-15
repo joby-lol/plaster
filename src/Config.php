@@ -88,7 +88,7 @@ class Config implements Interfaces\Config
                 $config[$key] = preg_replace_callback(
                     '/\{\{ ?([^\{\}]+) ?\}\}/',
                     function ($matches) use ($obj) {
-                        return $this->get($matches[1]);
+                        return $obj->get($matches[1]);
                     },
                     $value);
             } else {

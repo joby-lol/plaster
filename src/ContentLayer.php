@@ -138,7 +138,7 @@ class ContentLayer extends AbstractLayer implements Interfaces\TransformationLay
         $meta['date']->setTimestamp(filemtime($file));
         //content disposition
         $meta['headers']['Content-Disposition'] = array(
-            'filename' => preg_replace('/^.*[\/\\\]/', '', $file),
+            'filename' => preg_replace("/^.*[\/\\\]/", '', $file),
         );
         //mime
         if (function_exists("finfo_open") && false) {
