@@ -1,4 +1,5 @@
 vendor/
 composer.lock
+*.sublime-project
 *.sublime-workspace
-.phpintel
+.phpintel/
