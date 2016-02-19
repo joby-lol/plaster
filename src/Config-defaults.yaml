@@ -48,6 +48,7 @@ ContentLayer:
     defaultHandler: '\jobyone\Plaster\ContentHandlers\StreamHandler'
     fileHandlerPatterns:
         '/\.md$/i': '\jobyone\Plaster\ContentHandlers\MarkdownHandler'
+        '/\.html?$/i': '\jobyone\Plaster\ContentHandlers\HTMLHandler'
     # simpleMime settings are only for servers without fileinfo
     simpleMime:
         '/\.(bmp?)$/i': 'image/bmp'
