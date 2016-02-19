@@ -112,7 +112,7 @@ class Response implements Interfaces\Response
     {
         $headers = $this->getHeaders();
         //shorthands in metadata
-        if ($this->meta['redirect']) {
+        if (isset($this->meta['redirect']) && $this->meta['redirect']) {
             $headers['Location'] = $this->meta['redirect'];
             $this->setStatus(302);
         }
