@@ -134,9 +134,6 @@ class Response implements Interfaces\Response
                         $stringValue .= "$valueKey; ";
                         continue;
                     }
-                    if (preg_match('/[^0-9]/', $valueValue)) {
-                        $valueValue = "'$valueValue'";
-                    }
                     $stringValue .= "$valueKey=$valueValue; ";
                 }
                 $stringValue = trim($stringValue);
