@@ -16,6 +16,9 @@ TemplateManager:
         paths:
             - '{{System.root}}/templates'
 
+TemplateHelper:
+    breadcrumbDepth: 10
+
 TemplateHelperPage:
     activeClass: 'active'
     pathActiveClass: 'pathactive'

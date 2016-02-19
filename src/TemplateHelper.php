@@ -84,7 +84,7 @@ class TemplateHelper implements Interfaces\TemplateHelper
         $breadCrumb = array();
         $parent     = $this->parent($url);
         $step       = 0;
-        while ($parent && $step++ < 10) {
+        while ($parent && $step++ <= $this->config->get('TemplateHelper.breadcrumbDepth')) {
             if ($parent->url() == $this->config->get('System.docRoot') . '/') {
                 break;
             }
