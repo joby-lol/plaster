@@ -20,9 +20,17 @@ class FileLayer extends AbstractLayer implements Interfaces\TransformationLayer
         }
         $response->setUrl($url);
 
-        //TODO: Check for dangerous paths
+        //404 on nonexistent indexes or otherwise non-found files
+        if (!$file) {
+            return $this->error($response, 404);
+        }
+
+        //Check for dangerous paths
+        //Currently limited to checking that requested file is inside FileLayer.source
         $file = realpath($file);
-        if (!$file || !file_exists($file)) {
+        if (!file_exists($file)
+            || !(strpos($file, $this->config->get('FileLayer.source')) === 0)
+        ) {
             return $this->error($response, 404);
         }
 
