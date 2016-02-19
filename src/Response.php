@@ -110,7 +110,14 @@ class Response implements Interfaces\Response
     }
     public function renderHeaders()
     {
-        foreach ($this->getHeaders() as $header => $value) {
+        $headers = $this->getHeaders();
+        //shorthands in metadata
+        if ($this->meta['redirect']) {
+            $headers['Location'] = $this->meta['redirect'];
+            $this->setStatus(302);
+        }
+        //render headers
+        foreach ($headers as $header => $value) {
             if (!$value) {
                 continue;
             }
