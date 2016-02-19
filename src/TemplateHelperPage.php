@@ -81,11 +81,11 @@ class TemplateHelperPage implements Interfaces\TemplateHelperPage
         $curUrl = $this->config->get('system.currentUrl');
         if ($curUrl) {
             $relUrl = $this->response->getUrl();
-            if ($curUrl == $relUrl) {
+            if ($curUrl == $relUrl || $curUrl == $relUrl . '/') {
                 $classes[] = $this->config->get('TemplateHelperPage.activeClass');
             }
-            if (($this->config->get('TemplateHelperPage.pathActiveOnHome' || $relUrl != '/'))
-                && strpos($curUrl, $relUrl) === 0) {
+            if ((!$this->config->get('TemplateHelperPage.pathActiveOnHome' || $relUrl != '/'))
+                && strpos($curUrl, $relUrl . '/') === 0) {
                 $classes[] = $this->config->get('TemplateHelperPage.pathActiveClass');
             }
         }
