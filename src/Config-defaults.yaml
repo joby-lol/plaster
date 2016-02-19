@@ -16,6 +16,11 @@ TemplateManager:
         paths:
             - '{{System.root}}/templates'
 
+TemplateHelperPage:
+    activeClass: 'active'
+    pathActiveClass: 'pathactive'
+    pathActiveOnHome: false
+
 FileLayer:
     source: '{{System.root}}'
     indexes: []

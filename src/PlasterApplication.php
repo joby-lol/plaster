@@ -54,6 +54,10 @@ class PlasterApplication
         if (!$url) {
             $url = $_SERVER['PATH_INFO'];
         }
+        //set current url globally in config
+        $this->config->set(array(
+            'system' => array('currentUrl' => $url),
+        ));
         //set up a new Response and transform it through the full stack
         $response = new Response($url);
         $response = $this->fullStack->transform($response);
